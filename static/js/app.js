@@ -611,10 +611,47 @@ function showToast(message, type = "info") {
     container.appendChild(toast);
     lucide.createIcons();
 
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        toast.style.transform = 'translateY(10px)';
-        setTimeout(() => toast.remove(), 300);
-    }, 3500);
+// Export Data History as JSON or CSV
+function exportData(format = 'json') {
+    if (!allIssues || allIssues.length === 0) {
+        showToast("No incident data available to export", "info");
+        return;
+    }
+
+    if (format === 'json') {
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allIssues, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        downloadAnchor.setAttribute("download", `campusfix_incident_history_${new Date().toISOString().slice(0,10)}.json`);
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+        showToast("Exported history as JSON file", "success");
+    } else if (format === 'csv') {
+        const headers = ["ID", "Title", "Category", "Priority", "Status", "Department", "Location", "SLA", "Hazard_Level", "Timestamp", "Action_Directive"];
+        const rows = allIssues.map(i => [
+            `"${i.id || ''}"`,
+            `"${(i.title || '').replace(/"/g, '""')}"`,
+            `"${i.category || ''}"`,
+            `"${i.priority || ''}"`,
+            `"${i.status || ''}"`,
+            `"${i.department || ''}"`,
+            `"${(i.location || '').replace(/"/g, '""')}"`,
+            `"${i.estimated_sla || ''}"`,
+            `"${(i.hazard_level || '').replace(/"/g, '""')}"`,
+            `"${i.timestamp || ''}"`,
+            `"${(i.suggested_action || '').replace(/"/g, '""')}"`
+        ]);
+
+        const csvContent = "data:text/csv;charset=utf-8," + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `campusfix_incident_history_${new Date().toISOString().slice(0,10)}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        showToast("Exported history as CSV spreadsheet", "success");
+    }
 }
 

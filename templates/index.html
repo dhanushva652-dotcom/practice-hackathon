@@ -356,7 +356,15 @@
                     <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Live Incident Operations Dashboard</h2>
                     <p class="text-slate-400 text-sm">Real-time campus issue tracking, priority triage, and facilities dispatch feed.</p>
                 </div>
-                <div class="flex items-center space-x-2">
+                <div class="flex items-center space-x-2 flex-wrap gap-y-2">
+                    <button onclick="exportData('json')" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-700 flex items-center space-x-1.5 transition-colors" title="Export incident history as JSON">
+                        <i data-lucide="download" class="w-3.5 h-3.5 text-emerald-400"></i>
+                        <span>Export JSON</span>
+                    </button>
+                    <button onclick="exportData('csv')" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-700 flex items-center space-x-1.5 transition-colors" title="Export incident history as CSV spreadsheet">
+                        <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5 text-sky-400"></i>
+                        <span>Export CSV</span>
+                    </button>
                     <button onclick="refreshDashboard()" class="px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-semibold border border-slate-700 flex items-center space-x-1.5 transition-colors">
                         <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
                         <span>Refresh</span>
